@@ -5,59 +5,53 @@ import os
 def load_flashcards(filename):
     with open(filename, 'r') as file:
         flashcards = json.load(file)
+    
+    # Check if each flashcard has a confidence_score attribute, if not, add it with a default value of 50
+    for card in flashcards:
+        if 'confidence_score' not in card:
+            card['confidence_score'] = 50
+    
     return flashcards
 
-def initialize_flashcards(flashcards):
-    if not os.path.exists("confidence_scores.json"):
-        with open("confidence_scores.json", "w") as file:
-            initial_confidence_scores = {i: 50 for i, _ in enumerate(flashcards)}
-            json.dump(initial_confidence_scores, file)
+def update_flashcards(filename, flashcards):
+    with open(filename, 'w') as file:
+        json.dump(flashcards, file, indent=4)
 
-def load_confidence_scores():
-    if not os.path.exists("confidence_scores.json"):
-        return {}
-    with open("confidence_scores.json", "r") as file:
-        return json.load(file)
-
-def update_confidence_score(confidence_score, rating):
-    if rating == 1:
-        confidence_score = max(1, confidence_score - 10)
-    elif rating == 3:
-        confidence_score = min(100, confidence_score + 10)
-    return confidence_score
+def update_confidence_score(flashcards, flashcard_index, rating):
+    if rating == 0:
+        flashcards[flashcard_index]['confidence_score'] = 50
+    else:
+        confidence_score = flashcards[flashcard_index].get('confidence_score', 50)
+        if rating == 1:
+            confidence_score = max(1, confidence_score - 10)
+        elif rating == 3:
+            confidence_score = min(100, confidence_score + 10)
+        flashcards[flashcard_index]['confidence_score'] = confidence_score
+    return flashcards
 
 def display_random_flashcard(flashcards):
-    # Load confidence scores
-    confidence_scores = load_confidence_scores()
+    # Calculate weights for random choice based on inverse of confidence score
+    weights = [1 / card['confidence_score'] for card in flashcards]
 
-    # Assign confidence scores to flashcards
-    for i, card in enumerate(flashcards):
-        if i in confidence_scores:
-            card['confidence_score'] = confidence_scores[i]
-        else:
-            card['confidence_score'] = 50
-
-    # Choose random flashcard based on confidence scores
-    random_flashcard = random.choices(flashcards, weights=[1 / card['confidence_score'] for card in flashcards])[0]
+    # Choose random flashcard with weights inversely proportional to confidence score
+    random_flashcard = random.choices(flashcards, weights=weights)[0]
 
     print("\nQuestion:", random_flashcard['question'])
     input("\nPress Enter to reveal the answer...")
     print("\nAnswer:", random_flashcard['answer'])
-    rating = int(input("\nRate your confidence level (1 for low, 2 for medium, 3 for high): "))
-    confidence_scores[flashcards.index(random_flashcard)] = update_confidence_score(random_flashcard['confidence_score'], rating)
+    
+    rating = int(input("\nRate your confidence level (0 to reset, 1 for low, 2 for medium, 3 for high): "))
+    flashcard_index = flashcards.index(random_flashcard)
+    flashcards = update_confidence_score(flashcards, flashcard_index, rating)
 
-    # Save confidence scores
-    with open("confidence_scores.json", "w") as file:
-        json.dump(confidence_scores, file)
+    # Update flashcards JSON file
+    update_flashcards(filename, flashcards)
 
 # Replace 'flashcards.json' with the path to your JSON file
 filename = 'flashcards.json'
 
 # Load flashcards from the JSON file
 flashcards = load_flashcards(filename)
-
-# Initialize flashcards with confidence scores
-initialize_flashcards(flashcards)
 
 # Continuously display random flashcards until the user decides to exit
 while True:
