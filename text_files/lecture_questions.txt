@@ -1,0 +1,1231 @@
+CHAPTER 2
+
+Exam preparation
+Questions based on the lectures
+2.1. Lecture 2: Financial data structures
+Chapter 2 in Advances in Financial Machine Learning by Marcos Lopez Prado.
+Question 1: "What are Fundamental Data?"
+Answer: Fundamental data encompasses information that can be found in
+regulatory filings and business analytics. It is mostly accounting data, reported
+quarterly. Fundamental data is extremely regularized and low frequency. Being
+so accessible to the marketplace, it is rather unlikely that there is much value left
+to be exploited. Still, it may be useful in combination with other data types.
+Question 2: "What are Market Data?"
+Answer: Market data includes all trading activity that takes place in an exchange or trading venue. Ideally, your data provider has given you a raw feed,
+with all sorts of unstructured information, like FIX messages that allow you to
+fully reconstruct the trading book, or the full collection of BWIC (bids wanted in
+competition) responses.
+Question 3: "What are Analytics?"
+Answer: You could think of analytics as derivative data, based on an original
+source, which could be fundamental, market, alternative, or even a collection of
+other analytics. A positive aspect of analytics is that the signal has been extracted
+for you from a raw source. The negative aspects are that analytics may be costly,
+the methodology used in their production may be biased or opaque, and you will
+not be the sole consumer.
+Question 4: "What are Alternative Data?"
+Answer: Alternative data is produced by individuals (social media, news, web
+searches, etc.), business processes (transactions, corporate data, government agencies, etc.), and sensors (satellites, geolocation, weather, CCTV, etc.). Some popular
+satellite image or video feeds include monitoring of tankers, tunnel traffic activity,
+or parking lot occupancies. What truly characterizes alternative data is that it is
+primary information, that is, information that has not made it to the other sources.
+25
+
+26
+
+2. EXAM PREPARATION QUESTIONS BASED ON THE LECTURES
+
+Question 5: "What are Tick Bars, Volume and Dollar Bars?"
+Answer: The idea behind tick bars is straightforward: The sample variables
+listed earlier (timestamp, VWAP, open price, etc.) will be extracted each time a predefined number of transactions takes place, e.g., 1,000 ticks. Volume bars sample
+every time a pre-defined amount of the security’s units (shares, futures contracts,
+etc.) have been exchanged. For example, we could sample prices every time a
+futures contract exchanges 1,000 units, regardless of the number of ticks involved.
+Dollar bars are formed by sampling an observation every time a pre-defined market value is exchanged.
+2.2. Lecture 3: Regression
+Sections 2.2.1 and 2.3 in S. Nagel, Machine Learning in Asset Pricing.
+Question 6: "Why is ordinary least square (OLS) regression not reliable in a
+high-dimensional setting?"
+Answer: In high-dimensional settings, where the number of indicators K is
+not small relative to the number of observations N, or perhaps even bigger than
+N, predictions based on OLS estimates often turn out to be unreliable. While the
+in-sample R2 in this case can be very high, the R2 for out-of-sample predictions can
+be very low or even negative. The reason is that with so many covariates relative
+to the number of observations, OLS greatly overfits the data.
+Question 7: "What is an elastic net?"
+Answer: The elastic net combines ridge and lasso penalties. Like the lasso,
+the elastic net will set some coefficients to exactly zero, but it relies on variable
+selection to a lesser degree than the lasso and instead also imposes some ridgelike shrinkage.
+2.3. Lecture 4: Cross-Sectional Stock Returns
+Section 3.1 in S. Nagel, Machine Learning in Asset Pricing.
+Question 8: When looking at Cross-Sectional Stock Returns one often includes
+squares and even third powers of returns. If the coefficients for squares and third
+powers are small, can we neglect them?
+Answer: No. The effect of the many small coefficients for squared or third
+power returns can add up to a non-negligible effect size.
+2.4. Lecture 5: Denoising
+Denoising, Section 2.1-2.6 in Prado, Elements in Quantitative Finance.
+
+2.6. LECTURE 6 (ON FRIDAY AFTERNOON): PREDICTIVE PERFORMANCE ASSESSMENT
+
+27
+
+Question 9: "Consider a matrix of independent and identically distributed
+random observations X, of size T ⇥ N, where the underlying process generating
+the observations has zero mean and variance 2 . To which matrix applies the
+Marcenko-Pastur theorem?"
+Answer: The Marcenko-Pastur theorem applies to the covariance matrix
+C = T -1 · Xt X .
+Question 10: "What is detoning?"
+Answer: Financial correlation matrices usually incorporate a market component. The reason is, it is more difficult to cluster a correlation matrix with a
+strong market component, because the algorithm will struggle to find dissimilarities across clusters. By removing the market component, we allow a greater
+portion of the correlation to be explained by components that affect specific subsets of the securities.
+2.5. Lecture 5b (on Friday afternoon): Cross-Validation
+Chapter 7 in Prado, Advances in Financial Machine Learning
+Question 11: "Why does K-fold CV fail in Finance?"
+Answer: Financial time series have memory. Leakage will take place when the
+training set contains information that also appears in the testing set. In addition,
+if a training set is directly after the test set, it means that the training set has information from the future of the test set, and thus will contaminate the test set with
+information that should not be available.
+Question 12: "How can you improve K-fold CV fail in Finance?"
+Answer: In many cases, purging suffices to prevent leakage. For those cases
+where purging is not able to prevent all leakage, we can impose an embargo on
+training observations after every test set.
+2.6. Lecture 6 (on Friday afternoon): Predictive Performance Assessment
+Section 3.2 in S. Nagel, Machine Learning in Asset Pricing.
+Question 13: "What is R2 ?"
+Answer: R2 is a statistical measure in a regression model that determines the
+proportion of variance in the dependent variable that can be explained by the independent variable. In other words, R2 shows how well the data fit the regression
+model.
+Question 14: "What is the sharpe ratio?"
+
+28
+
+2. EXAM PREPARATION QUESTIONS BASED ON THE LECTURES
+
+Answer: The Sharpe ratio’s numerator is the difference over time between realized, or expected, returns and a benchmark such as the risk-free rate of return or
+the performance of a particular investment category. Its denominator is the standard deviation of returns over the same period of time, a measure of volatility and
+risk.
+2.7. Lecture 13: Labeling
+Chapter 3 in Advances in Financial Machine Learning by Marcos Lopez Prado
+Question 15: "What is the key flaw of the fixed-time horizon method in labeling?"
+Answer: Every investment strategy has stop-loss limits, whether they are selfimposed by the portfolio manager, enforced by the risk department, or triggered
+by a margin call. It is simply unrealistic to build a strategy that profits from positions that would have been stopped-out by the exchange.
+Question 16: "How does the triple barrier method work in labeling?"
+Answer: First, one sets two horizontal barriers and one vertical barrier. The
+two horizontal barriers are defined by profit-taking and stop-loss limits, which are
+a dynamic function of estimated volatility (whether realized or implied). The third
+barrier is defined in terms of number of bars elapsed since the position was taken
+(an expiration limit). If the upper barrier is touched first, we label the observation
+as a 1. If the lower barrier is touched first, we label the observation as a -1. If the
+vertical barrier is touched first, we have two choices: the sign of the return, or a 0.
+Question 17: "What is meta-labeling?"
+Answer: If one has a primary model that decides the side of the bet, the secondary, meta-labeling model can be used to decide the size of the bet.
+2.8. Lecture 8: Clustering
+Chapter 4 in Prado, Elements in Quantitative Finance.
+Question 18: "What is aim of clustering?"
+Answer: The goal is to separate the objects into groups (called clusters) using
+the features, where intragroup similarities are maximized, and intergroup similarities are minimized. It is a form of unsupervised learning, because we do not
+provide examples to assist the algorithm in solving this task. Clustering problems
+appear naturally in finance, at every step of the investment process. For instance,
+analysts may look for historical analogues to current events, a task that involves
+developing a numerical taxonomy of events.
+Question 19: How does the nested clustered optimization algorithm (NCO)
+work in Portfolio Construction?
+
+2.10. LECTURE 10: FEATURE IMPORTANCE ANALYSIS
+
+29
+
+Answer: The NCO algorithm has four steps: 1.) cluster the correlation matrix,
+2.) compute the optimal intra-cluster allocations, 3.) compute the optimal intercluster allocations, 4.) derive the optimal weights as the dot-product of 2.) and 3.).
+2.9. Lecture 9: Bet Sizing
+Chapter 10 in Advances in Financial Machine Learning by Marcos Lopez Prado
+Question 20: "Why is bet sizing crucial?"
+Answer: We would prefer to size positions in such way that we reserve some
+cash for the possibility that the trading signal strengthens before it weakens. Otherwise it could happen that one looses money even betting on the right side of the
+bid: Suppose that one strategy produced a sequence of bet sizes [m1,1 , m1,2 , m1,3 ] =
+[.5, 1, 0], as the market price followed a sequence [p1 , p2 , p3 ] = [1, .5, 1.25], where pt
+is the price at time t. The other strategy produced a sequence [m2,1 , m2,2 , m2,3 ] =
+[1, .5, 0], as it was forced to reduce its bet size once the market moved against the
+initial full position. Both strategies produced forecasts that turned out to be correct
+(the price increased by 25% between p1 and p3 ), however the first strategy made
+money (0.5) while the second strategy lost money (-.125).
+Question 21: "How does the budgeting approach work?"
+Answer:
+Question 22: "Can one base bet sizing on meta labeling?"
+Answer: If one has a primary model that decides the side of the bet, the secondary, meta-labeling model can be used to decide the size of the bet. This approach has a couple of advantages: First, the ML algorithm that decides the bet
+sizes is independent of the primary model. Second, the predicted probability can
+be directly translated into bet size.
+2.10. Lecture 10: Feature Importance Analysis
+Chapter 6 in Prado, Elements in Quantitative Finance.
+Question 23: "What is Feature Importance Analysis?"
+Answer: An analysis of a machine learning models forecasts can tell us what
+variables are critically involved in a particular phenomenon, what variables are redundant, what variables are useless, and how the relevant variables interact with
+each other.
+Question 24: "What are p-Values?"
+Answer: The p-value quantifies the probability that, if the true coefficient associated with that variable is zero, we could have obtained a result equal or more
+extreme than the one we have estimated.
+
+30
+
+2. EXAM PREPARATION QUESTIONS BASED ON THE LECTURES
+
+Question 25: "How does the Cluster Feature Importance algorithm work?"
+Answer: The clustered feature importance (CFI) algorithm involves two steps:
+(1) finding the number and constituents of the clusters of features; (2) applying the
+feature importance analysis on groups of similar features rather than on individual
+features.
+2.11. Lecture 11: Fractional Differentiation
+Chapter 7 in Advances in Financial Machine Learning by Marcos Lopez Prado.
+Question 26: "Why should we use Fractional Differentiation?"
+Answer: Financial series exhibit low signal-to-noise ratios. To make matters
+worse, standard stationarity transformations, like integer differentiation, further
+reduce that signal by removing memory. Price series have memory, because every
+value is dependent upon a long history of previous levels. In contrast, integer
+differentiated series, like returns, have a memory cut-off, in the sense that history
+is disregarded entirely after a finite sample window.
+Question 27: "What is the stationarity vs. memory dilema?"
+Answer: The dilemma is that returns are stationary, however memory-less,
+and prices have memory, however they are non-stationary.
+2.12. Lecture 12: Structural Breaks
+Chapter 17 in Advances in Financial Machine Learning by Marcos Lopez Prado.
+Question 28: "Why are structural breaks interesting?"
+Answer: When a structural break takes place, most market participants are
+caught off guard, and they will make costly mistakes. This sort of errors is the
+basis for many profitable strategies, because the actors on the losing side will typically become aware of their mistake once it is too late. Before they accept their
+losses, they will act irrationally, try to hold the position, and hope for a comeback.
+Sometimes they will even increase a losing position, in desperation. Eventually
+they will be forced to stop loss or stop out. Structural breaks offer some of the best
+risk/rewards.
+Question 29: "What is the objective of the CUSUM test?"
+Answer: CUSUM (cumulative sum) tests test whether the cumulative forecasting errors deviates significantly from white noise.
+Question 30: "What is the objective of the Explosiveness tests?"
+Answer: Beyond deviation from white noise, these test whether the process
+exhibits exponential growth or collapse, as this is inconsistent with a random walk
+or stationary process, and it is unsustainable in the long run.
+
+2.14. LECTURE 14: ENTROPY FEATURES
+
+31
+
+2.13. Lecture 13: Microstructural features
+based on Chapter 19 in Advances in Financial Machine Learning by Marcos
+Lopez Prado.
+Question 31: "What is the content of Microstructural Datasets?"
+Answer: Microstructural datasets include primary information about the auctioning process, like order cancellations, double auction book, queues, partial fills,
+aggressor side, corrections, replacements, etc. The main source is Financial Information eXchange (FIX) messages, which can be purchased from exchanges.
+Question 32: "What is the role of PIN (probability of informed trading)?"
+Answer: PIN explains the bid-ask spread as the consequence of a sequential
+strategic decision between liquidity providers (market makers) and position takers
+(informed traders). The bid-ask spreads are a function of liquidity.
+Question 33: "What are Quote stuffers?"
+Answer: They engage in “latency arbitrage.” Their strategy involves overwhelming an exchange with messages, with the sole intention of slowing down
+competing algorithms, which are forced to parse messages that only the originators know can be ignored.
+Question 34: "What are Quote danglers?"
+Answer: This strategy sends quotes that force a squeezed trader to chase a
+price against her interests.
+Question 35: "What are Liquidity squeezers?"
+Answer: When a distressed large investor is forced to unwind her position,
+predatory algorithms trade in the same direction, draining as much liquidity as
+possible. As a result, prices overshoot and they make a profit.
+Question 36: "What are Pack hunters?"
+Answer: Predators hunting independently become aware of one another’s activities, and form a pack in order to maximize the chances of triggering a cascading
+effect.
+2.14. Lecture 14: Entropy features
+Chapter 18 in Advances in Financial Machine Learning by Marcos Lopez Prado.
+Question 37: "Why is it interesting to know whether or not a time series contains information?"
+
+32
+
+2. EXAM PREPARATION QUESTIONS BASED ON THE LECTURES
+
+Answer: When markets are not perfect, prices are formed with partial information, and as some agents know more than others, they can exploit that informational asymmetry. It would be helpful to estimate the informational content of
+price series, and form features on which ML algorithms can learn the likely outcomes. For example, the ML algorithm may find that momentum bets are more
+profitable when prices carry little information, and that mean-reversion bets are
+more profitable when prices carry a lot of information.
+Question 38: "If two time series are indenpent, then their mutual information
+is -1, 0, or 1?"
+Answer: Zero.
+Question 39: "Why bubbles are formed in a low entropy market?"
+Answer: When arbitrage mechanisms exploit the complete set of opportunities, prices instantaneously reflect the full amount of available information, becoming unpredictable (i.e., a martingale), with no discernable patterns. Conversely,
+when arbitrage is not perfect, prices contain incomplete amounts of information,
+which gives rise to predictable patterns. Patterns occur when a string contains redundant information, which enables its compression. The entropy rate of a string
+determines its optimal compression rate. The higher the entropy, the lower the
+redundancy and the greater the informational content. Consequently, the entropy
+of a price string tells us the degree of market efficiency at a given point in time. A
+“decompressed” market is an efficient market, because price information is nonredundant. A “compressed” market is an inefficient market, because price information is redundant. Bubbles are formed in compressed (low entropy) markets.
+2.15. Lecture 15: Distance metrics
+Chapter 3 in Prado, Elements in Quantitative Finance.
+Question 40: "What is the role of Conditional Entropy H[X|Y]?"
+Answer: H[X|Y] is the uncertainty we expect in X if we are told the value of Y.
+Question 41: "What is the role of Mutual information I[X, Y]?"
+Answer: Mutual information is defined as the decrease in uncertainty (or informational gain) in X that results from knowing the value of Y.
+Question 42: "What is the role of Variation of information?"
+Answer: This measure can be interpreted as the uncertainty we expect in one
+variable if we are told the value of the other.
+2.16. Lecture 16: Porfolio construction
+Chapter 7, in Prado, Elements in Quantitative Finance.
+
+2.17. LECTURE 17: HIERARCHICAL RISK PARITY
+
+33
+
+Question 43: "What is Markowitz’s Curse?"
+Answer: When securities within a portfolio are highly correlated, the covariance matrix C has a high condition number, and the values of C-1 explode. This is
+problematic in the context of portfolio optimization, because the portfolio weights
+! depends on C-1 and unless the correlations ⇢ ⇡ 0, we must expect an unstable
+solution to the convex optimization program. In other words, Markowitz’s solution is guaranteed to be numerically stable only if ⇢ ⇡ 0, which is precisely the
+case when we don’t need it! The reason we needed Markowitz was to handle the
+⇢ 6⇡ 0 case, but the more we need Markowitz, the more numerically unstable is the
+estimation of !. This is Markowitz’s curse.
+2.17. Lecture 17: Hierarchical Risk Parity
+Chapter 16 in Advances in Financial Machine Learning by Marcos Lopez Prado.
+Question 44: "What are three known issues with Markowitz’s Critical Line
+Algorithm (CLA)?"
+Answer: Instability (small deviations in the forecasted returns will cause CLA
+to produce very different portfolios), concentration (a consequence of pursuing the
+optimal asset allocation), and under-performance (even naive equally-weighted
+portfolios have been shown to beat mean-variance portfolios).
+Question 45: Why is the hierarchical risk parity portfolio more resistent against
+shocks than the CLA and the IVP (inverse variance portfolio)?
+Answer: Shocks affecting a specific investment penalize CLA’s concentration.
+Shocks involving several correlated investments penalize IVP’s ignorance of the
+correlation structure. HRP provides better protection against both common and
+idiosyncratic shocks by finding a compromise between diversification across all
+investments and diversification across clusters of investments at multiple hierarchical levels.
+
+CHAPTER 3
+
+Exam preparation - Possible questions based on the
+students contributions
+The following sections are based, often literally, on the slides contributed by
+students for the exercise class. This chapter does not provide a proper presentation
+of any of the subjects; it is just a collection of questions and possible answers.
+These are just possible answers suggest in the presentations, there are many other
+ways to correctly answer the questions. This list is work in progress, it will be
+updated regularly.
+3.1. Denoising
+• Priyanka Teja Ravi,
+• Ramiscan Yakar
+• Tolga Keskinoglu.
+Question 1: "Why should we use denoising?"
+Answer: Financial data is notorious for having low a signal-to-noise ratio. Empirical covariance matrices are often numerically ill-conditioned. It is not recommended to work with these matrices directly, without treatment.
+Question 2: "What is the essence of the Marcenko-Pastur theorem?"
+Answer: The Marcenko-Pastur theorem gives the distribution of eigenvalues
+associated with a random covariance matrix. By adjusting this distribution, we
+can discriminate between eigenvalues associated with the signal and eigenvalues
+associated with noise. Denoising reduces the condition number of the covariance
+matrix by increasing the lowest eigenvalue.
+Question 3: Why should we allow an adjustable factor q = N/T ?
+Answer: Intuitively, correlated samples are somehow redundant and the covariance matrix should behave as if we had observed not T samples but an effective number T 0 < T .
+Question 4: What is the usage of detoning?
+Answer: Removing the market components present in the covariance matrix
+reinforces the more subtle signals hidden beneath the market.
+
+35
+
+36
+
+3. EXAM PREPARATION - POSSIBLE QUESTIONS BASED ON THE STUDENTS CONTRIBUTIONS
+
+3.2. Cross Validation
+• Rabin BK
+• Yatin Arora.
+Question 5: "What is k-fold cross validation?"
+Answer: This approach involves randomly dividing the set of observations
+into k groups, or folds, of approximately equal size. The one fold is treated as a
+validation set, and the method is fit on the remaining k - 1 folds.
+Question 6: "Why cross validation fails when applied to financial time series?"
+Answer: There are several reasons: i.) Financial data exhibits patterns and dependencies that violate the assumption of CV; ii.) Leakage takes place when the
+training set contains information that also appears in the testing set. This is the
+case due to memory contained in financial time series. iii.) Financial data are influenced by various external factors and market dynamics that change over time. iv.)
+The training set may contain information of the testing set, if the former is in the
+future of the latter.
+Question 7: "What is leakage?"
+Answer: Leakage means that information is revealed to the model that gives
+it an unrealistic advantage to make better predictions. This could happen when
+test data is leaked into the training set, or when data from the future is leaked to
+the past. Any time that a model is given information that it shouldn’t have access
+to when it is making predictions in real time, there is leakage.
+Question 8: "How can one reduce the likelihood of leakage?"
+Answer: Filtering data: remove any observations where label Yi is dependent
+on information used to determine another label Yj for j belongs to the testing set.
+3.2.1. Question 9: "How can one avoiding Overfitting?"
+Answer: Method 1: Early Stopping of Base Estimators, monitoring the performance during training and stopping when performance on a validation set begins
+to degrade;
+Method 2: Bagging (Bootstrap Aggregating) of classifiers with diversity controls training multiple classifiers on subsets of the data and combine their predictions ensuring that individual classifiers are as diverse as possible.
+3.2.2. Question 10: "Which sets should be purged in k-fold cross validation"
+Answer: One should purge from the training set all observations whose labels
+overlap in time with those labels included in the testing set.
+3.2.3. Question 11: "What is the role of an embargo set?"
+
+3.4. TREND INDICATORS
+
+37
+
+Answer: It is imposed on training observations after every test set where purging is not able to prevent all leakage.
+3.3. Momentum indicators (KAMA, AOI, RSI)
+• Amit Jadhav (23036144)
+• Apurwa Agrawal (23161645)
+• Rahul Ramraje (23081510)
+Question 12: "What is role of KAMA (Kaufman Adaptive Moving Average)?"
+Answer: KAMA is a moving average designed to account for market noise or
+volatility. It has a lower number of false signals in comparison to other types of
+moving averages.
+Question 13: "What information can be extracted from the Awesome Oscillator?"
+Answer: The Awesome Oscillator provides the difference between SMA(5)
+and SMA(34); SMA stands for Simple Moving Average. It helps forecast market momentum and whether the prevailing trend will continue or reverse. When
+above the zero line, the market is bullish, and when below the zero line, the market
+is bearish 1. The indicator’s bars can provide buy or sell signals, and traders often use patterns such as the saucer, twin peaks, and zero-line crossover to identify
+bullish or bearish trends.
+Question 14: "What information can be extracted from the Relative Strength
+Index (RSI)?"
+Answer: RSI measures the speed and magnitude of a security’s recent price
+changes. It is used to identify overvalued or undervalued prices of stocks. RSI
+assigns stocks a value between 0 and 100.
+3.4. Trend indicators
+• Ashik Shivanna Gowda
+• Mohit Kumar
+• Sayantani Sensharma
+• Viranaya Tapesh Shah
+Question 15: "What is role of moving averages?"
+Answer: The primary focus is on averaging prices over time to smoothing out
+market fluctuations and to identify trends.
+Question 16: "What is role of oscillators?"
+Answer: Fluctuations around a central value or within a range are used to
+identify momentum, trend strength, and overbought or oversold conditions.
+
+38
+
+3. EXAM PREPARATION - POSSIBLE QUESTIONS BASED ON THE STUDENTS CONTRIBUTIONS
+
+Question 17: "What are SMA, WMA and EMA?"
+Answer: Simple Moving Average (SMA): An upward moving SMA indicates an
+uptrend. A downward moving SMA suggests a downtrend. A 200-bar SMA is
+commonly used as an indicator of the long-term trend. A 50-bar SMA helps gauge
+the intermediate trend. Shorter period SMAs can be utilized to identify short-term
+trends.
+Weighted Moving Average (WMA): WMA provides a more sensitive indicator
+that responds more closely to the latest price changes compared to the SMA.
+Exponential Moving Average (EMA): EMA calculation incorporates the previous
+EMA value, ensuring that all past price data is included. Recent price actions have
+a more significant influence on EMA, with older data having a minimal impact.
+Question 18: "What are MACDs (Moving Average Convergence Divergence)?"
+Answer: The MACD indicator is a collection of three time series calculated
+from historical price data: i.) MACD Line: EMAfast - EMAslow ; ii.) Signal Line:
+EMA of the MACD Line; iii.) MACD Histogram: MACD Line – Signal Line.
+Question 19: "What are Detrended Pricing Oscillators (DPOs)?"
+Answer: DPO = Price - SMA(Price, N).
+DPO is designed to remove the trend from a price, allowing you to more easily
+identify cycles and overbought or oversold levels in a security.
+Question 20: "What are PSARs (Parabolic Stop and Reverse)?"
+Answer: Parabolic Stop and Reverse (PSAR) is a trailing stop-based trading
+system. PSAR for the next period is calculated based on whether the trend is
+upward or downward. Parabolic SAR System: Acts as a "stop and reverse" mechanism. Calculates a stop level for each period. Trade direction reverses when the
+stop is hit. Ensures continuous market investment.
+3.5. Tick, Volume, and Dollar bars
+• Moritz Link,
+• Ahmed Ibrahim,
+• Brijesh Mandaliya.
+Question 21: "What are time bars?"
+Answer: A graphical representation of stock prices over a time interval. Each
+bar represents the opening, high, low, and closing prices for that time interval.
+Question 22: "What are tick bars?"
+
+3.6. VOLUME INDICATORS
+
+39
+
+Answer: Tick bars are created by aggregating specific amount of actions into
+bars. Each bar represents the opening, high, low, and closing prices for that action
+interval. The number of ticks in each bar will vary depending on the liquidity of
+the asset and the volatility of the market. It provides a detailed view of market
+activity, helping traders analyze short-term trends and make quicker decisions.
+Question 23: "What are volume bars?"
+Answer: Volume bars are created by aggregating trades into fixed-size volume
+shares, such as 100 contracts or 1000 contracts. Each bar represents the opening,
+high, low, and closing prices for that volume interval. The height of the volume
+bar will vary depending on the size of the contracts and the liquidity of the asset.
+Question 24: "What are dollar bars?"
+Answer: Dollar bars are calculated by multiplying the volume data with the
+price (in dollars) and aggregating it into fixed-size dollar intervals, such as $10.000
+or $100.000. A dollar graph in finance represents the total value of traded securities
+in dollars rather than just the number of shares. It helps investors assess the overall
+monetary impact of trading activity, providing insights into market liquidity and
+the significance of price movement.
+3.6. Volume indicators
+• Mohammad Ayaz Alam (23196606)
+• Bijay Marasini (23162258)
+Question 25: "What is the Money Flow Index (MFI)?"
+Answer: Money Flow index is an oscillator that uses both volume and price
+to measure buying and selling pressure. MFI is also known as Volume-Weighted
+RSI (Relative Strength Index). It evaluates the inflow and outflow of money in
+a security over a specified period. MFI above 80 suggests a potential overbought
+condition, indicating a possible price reversal. MFI below 20 indicates a potential
+oversold condition, indicating a possible price reversal.
+Question 26: "What is the Volume Weighted Average Price (VWAP)?"
+Answer: VWAP is used to identify liquidity points. VWAP is a single-day
+indicator and restarts at the open of each new trading day. It gives the volumeweighted average price of a security.
+Question 27: "What is Anchored VWAP?"
+Answer: Anchored VWAP is a trading indicator that provides the average
+price of a security from a specific starting point (anchor) factoring in price and
+volume.
+
+40
+
+3. EXAM PREPARATION - POSSIBLE QUESTIONS BASED ON THE STUDENTS CONTRIBUTIONS
+
+3.7. Volume indicators
+• Ajay Sah (24172531)
+• Pallavi Ghimire (23221174)
+• Rachana Kafle (23159096)
+Question 28: "Why would one use Volume Indicators?"
+Answer: Volume indicators reveal crucial information regarding trading activity of a financial instrument, such as stocks, bonds, or commodities. They offer
+insights into the strength or weakness of a price movement by measuring the number of shares or contracts traded over a specific period.
+Question 29: "What are major reasons for the need of volume indicators?"
+Answer: Confirmation of Price Trends, Identification of Reversals, Breakout
+Confirmation, Divergence Analysis, Early Warning Signals, Confirmation of Trend
+Continuation.
+Question 30: What is the usage of the Chaikin Money Flow indicator?
+Answer: The Chaikin Money Flow indicator measures accumulation and distribution of a security over time. It generates buy, sell, and confirmation signals
+through bullish and bearish convergences and divergences as well as crossovers
+through the zero line. Compared to Accumulation/Distribution and On-Balance
+Volume, which focus on cumulative volume, CMF emphasizes the relationship
+between closing prices and intraday highs and lows.
+Question 31: Where can Chaikin Money Flow be useful?
+Answer: Assessing Buying and Selling Pressure (designed to reflect the relationship between price and volume, providing insights into the money flow direction). Confirmation of Price Movements (useful for confirming the strength of a
+price trend). Divergence Analysis (may offer insights into potential trend reversals or weakening trends). Evaluating Market Sentiment (High CMF values may
+indicate bullish sentiment, while low values may suggest bearish sentiment). Customizing Timeframes (Different timeframes may reveal different aspects of money
+flow dynamics).
+Question 32: How would you interpret Chaikin Money Flow indicator?
+Answer: A very low CMF value (well below zero) indicates selling pressure
+in the market. A divergence occurs when a price moves in a certain direction but
+the CMF does not move in the same direction. If a divergence exists over a longer
+period of time, this should be understood as a clear indication of an impending
+trend change. A value above zero is a positive CMF. A value below zero is referred
+to as a negative CMF
+Question 33: What are the shortcomings of Chaikin Money Flow indicator?
+
+3.8. MOMENTUM INDICATORS
+
+41
+
+Answer: Sensitivity to price fluctuations - can be less reliable during volatile
+periods or when the trend of a security is flattening. However, it can be used in
+combination with other technical indicators that can provide further information.
+Question 34: What is the Accumulation Distribution Index (ADI)?
+Answer: The ADI combines price and volume to show how money may be
+flowing into or out of a stock. Positive ADI values indicate accumulation, suggesting that the stocks is being accumulated or bought. Negative ADI values suggest
+distribution, indicating that the stocks is being sold or distributed.
+Question 35: What is On-Balance Volume (OBV)?
+Answer: OBV calculates the buying and selling pressure as a cumulative indicator. It sums up volume on up days and subtracts volume on down days. Relation between the current trend and the OBV reflects the upcoming price movements. It generates a bullish divergence, when OBV is rising and price is falling.
+It generates a bearish divergence when OBV is falling and price is rising.
+3.8. Momentum indicators
+• Nishanth Narayanan,
+• Kamalkhumar Lakshmanan Sharavanan,
+• Darren Morris Babu,
+• Karthikeyan Mathavan,
+• Avani Shaileshkumar Popat.
+Question 36: "What is the Average Directional Index (ADX)?"
+Answer: The ADX indicator helps traders gauge the strength of price movements over time. It is plotted as a single line with values ranging from 0 to 100,
+with higher values indicating stronger trends. The ADX is non-directional, meaning it measures trend strength without regard to the direction of the trend.
+The ADX consists of three lines: an ADX line, a +DI line, and a -DI line. The
++DI line measures the strength of upward trends, while the -DI line measures the
+strength of downward trends. The ADX line is plotted above the DMI lines and
+is used to assess the overall strength of the trend. The ADX increases when the
+positive directional indicator (+DI) surpasses the negative directional indicator (DI) and vice versa, indicating a stronger trend.
+Question 37: "What does the Average Directional Index (ADX) tell you?"
+Answer: ADX values above 25 indicate strong trends, while values below 20
+indicate weak trends. ADX values below 20 suggest a trendless market, indicating
+a less favourable time for entering trades. Crossovers of the +DI and - DI lines,
+combined with ADX readings above 20, can signal potential buy or sell opportunities.
+
+42
+
+3. EXAM PREPARATION - POSSIBLE QUESTIONS BASED ON THE STUDENTS CONTRIBUTIONS
+
+Question 38: "What does the Rate of Change (ROC) indicator tell you?"
+Answer: The Rate of Change (ROC) indicator is a pure momentum oscillator
+that helps traders identify the speed at which the price of a security is changing.
+Question 39: "What does the Stochastic RSI indicator tell you?"
+Answer: Stochastic RSI is a technical analysis indicator used to measure momentum and identify overbought and oversold conditions in the market. The values of StochRSI are derived from the RSI. Essentially, a StochRSI is the observation
+of change in RSI values w.r.t prices. Unlike the traditional momentum indicators, where 70 and 30 indicate the turning points, the StochRSI uses 80 and 20
+as the price overbought and oversold, respectively. StochRSI surpassing 80% signals an overbought market condition. It suggests an impending downward turn.
+StochRSI below 20% signals an oversold market condition. It suggests an impending upward turn.
+Question 40: "Why is the Stochastic RSI indicator more effective than RSI?"
+Answer: Stochastic RSI was created to increase the sensitivity, and reliability
+of regular RSI for better identifying overbought or oversold conditions. StochRSI
+moves very quickly from overbought to oversold, or vice versa, while the RSI is
+a much slower-moving indicator. StochRSI is the second derivative of price. It is
+looking at how the RSI is changing, not the original price.
+3.9. Simple, Exponential, Weighted and Hull Moving Averages
+• Bilal Ahmad Butt
+Question 41: How are SMAs computed?
+Answer: Simple moving averages give equal weight to all data points in the
+calculation, regardless of their age. This results in less responsiveness to recent
+price movements.
+Question 42: How are EMAs computed?
+Answer: Exponential moving averages overcome the limitations of SMAs by
+assigning greater weights to recent data points. As a result, it reacts faster to price
+changes. However, overweighting recent dates creates a bias that leads to more
+false alarms.
+Question 43: How are Weighted Moving Averages computed?
+Answer: Weighted Moving Averages give different weights to data points in
+the sample window. Weighting the most current price data as more significant
+creates the potential for the line to change suddenly and sharply due to volatility.
+Question 44: How are Hull Moving Averages computed?
+
+3.11. BACKTESTING WITH INDICATORS
+
+43
+
+Answer: Hull Moving Average uses two different weighted moving averages
+(WMAs) of price, and a third WMA to smooth the raw moving average. The HMA
+reduces lag by placing additional weight on more recent values. Offsetting one
+WMA with another WMA that covers only the most recent half of the specified
+timeframe. Smoothing uses another WMA with even fewer periods (the square
+root), further weighting the average towards the most recent data.
+3.10. Trading strategy
+• Pratik Raut,
+• Justins Pulpakunnel Varkey
+• Venkata Sai Swetha Gatamaneni.
+Question 45: "What are support levels?"
+Answer: These are price levels where buyers are more likely to step in and
+buy, preventing the price from falling further. Support levels can act as temporary
+floors for the price. Breakouts below support levels can signal a shift in trend to
+bearish.
+Question 46: "What are resistance levels?"
+Answer: A price level where sellers are more likely to step in and sell, preventing the price from rising further. Support levels can act as a temporary ceiling for
+the price. Breakouts above resistance levels can signal a shift in trend to bullish.
+Question 47: Why Use Pivot Points?
+Answer: Pivot points can be used to: Identify potential trading opportunities;
+Set stop-loss and profit-target orders; Manage risk; Develop trading strategies.
+Question 48: How to use Pivot Points?
+Answer: Pivot points can be used to identify support and resistance levels on
+a chart. These levels can then be used to generate trading signals.
+Question 49: What is Super Trend?
+Answer: Super Trend is an indicator that uses price movement and volatility to indicate trend direction, providing clear buy or sell signals with colourchanging line on price charts.
+3.11. Backtesting with Indicators
+• Acharya Ramkrishna,
+• Gaire Bimal,
+• Umar Yaseen.
+Question 50: "What is Backtesting?"
+
+44
+
+3. EXAM PREPARATION - POSSIBLE QUESTIONS BASED ON THE STUDENTS CONTRIBUTIONS
+
+Answer: Backtesting assesses the viability of a trading strategy or pricing model
+by discovering how it would have played out retrospectively using historical data;
+Applies predetermined rules to past price data; We can see how the strategy would
+have performed in the past; Strategy: Any combination of financial indicators that
+work together in helping investors make a informed decision.
+3.12. Feature Importance
+• Parwiz Ibrahimi (23049130)
+• Pragati Biradar (23072456)
+• Shivam Singh (23072210)
+• Srusti Ujjini Math (23075690)
+Question 51: "What is Mean Decrease Impurity (MDI)?"
+Answer: MDI is a fast, explanatory / importance (in sample, IS) method specific to tree based, RF. At each node of each decision tree, the selected feature splits
+the subset it received in such a way that impurity is decreased. The idea is that
+features that consistently lead to lower impurity are considered more important.
+For each decision tree, at each node where a split is made, the impurity decrease
+caused by that split is calculated. The overall importance of a feature is the sum of
+impurity decreases across all nodes where that feature is used for splitting, averaged over all trees.
+Question 52: "What is Mean Decrease Accuracy (MDA)?"
+Answer: The algorithm fits a machine learning model and drives its crossvalidation score on the Original data set (X, Y) For each feature f form X, the algorithm randomly permutes (shuffles) the feature value to create a modified feature
+matrix Xf. The algorithm measures the cross-validation performance on the modified data set (Xf, Y). The importance of feature f equals the difference between the
+original and modified cross-validation scores. MDA is Out-Of-Sample (OOS).
+Question 53: "What is Single Feature Importance?"
+Answer: Single Feature Importance (SFI) is a method used in predictive modelling that evaluates the importance of individual features (or variables) in making
+predictions. It computes the OOS performance score of each feature in isolation.
+Question 54: "What is SHAP (SHapley Additive exPlanations)?"
+Answer: SHAP values, rooted in cooperative game theory, offer a method for
+equitably distributing the impact of each feature on a machine learning model’s
+output. SHAP values offer insights into how individual features contribute to
+each prediction. The idea behind SHAP feature importance by aggregating SHAP
+values across all instances in the dataset, you can determine the global importance
+of each feature.
+
+3.14. VOLATILITY INDICATORS
+
+45
+
+Question 55: "What is LIME (Local Interpretable Model-agnostic Explanations)?"
+Answer: LIME is a technique used in machine learning to provide local and
+interpretable explanations for individual predictions. LIME focuses on creating
+locally faithful and interpretable models around specific instances. LIME helps
+bridge the gap between these opaque models and human interpretability. Ultimately, the choice between LIME and SHAP depends on the specific interpretability needs, the nature of the machine learning model, and whether the focus is on
+local or global explanations.
+3.13. Regression (R2 , MSE, Ridge, Lasso)
+• Aditi Singh (23217770)
+• Deeksha Vishnoi (23160464)
+• Nishant Mishra (23178030)
+Question 56: "What is role of R2 (coefficient and determination)?"
+Answer: The R2 coefficient represents the proportion of the variance for the
+dependent variable that is explained by the independent variables in a regression
+model. It ranges from 0 to 1. It does not indicate whether a regression model is
+adequate.
+Question 57: "What is role of the Mean Square Error (MSE)?"
+Answer: MSE is the average of the squares of the errors or deviations. It measures the quality of an estimator. A lower MSE indicates a closer fit of the model
+to the data. MSE alone may not be sufficient for assessing the quality of a model.
+Question 58: "What is Lasso?"
+Answer: Lasso stands for "least absolute shrinkage and selection operator."
+The shrinkage term penalizes the absolute size of the coefficients, encouraging
+some of them to become exactly zero. It facilitates feature selection, identifying
+and excluding irrelevant or redundant features.
+Question 59: "What is Ridge Regression?"
+Answer: Extends linear regression by adding a penalty term. The regularization parameter (alpha) controls the strength of regularization. Alpha decides the
+amount of regularization. A small alpha implies little or no regularization, making Ridge Regression approach ordinary linear regression. A large alpha leads to
+stronger regularization, shrinking coefficients and preventing overfitting.
+3.14. Volatility Indicators
+• Alankar Uniyal,
+• Tibet Erten
+• Muhammad Ali.
+
+46
+
+3. EXAM PREPARATION - POSSIBLE QUESTIONS BASED ON THE STUDENTS CONTRIBUTIONS
+
+Question 60: "What is Mass Index (MI)?"
+Answer: It uses the high-low range to identify trend reversals based on range
+expansions. It identifies range bulges that can foreshadow a reversal of the current
+trend."
+Question 61: "What is Keltner Channel (KC)?"
+Answer: Keltner Channels are a trend following indicator used to identify reversals with channel breakouts and channel direction. Channels can also be used
+to identify overbought and oversold levels when the trend is flat.
+Question 62: "What is the Relative Volatility Index (RVI)?"
+Answer: RVI, or Relative Volatility Index, measures the relative strength of
+a security’s recent gains against losses. It is essential for understanding market
+volatility and predicting potential trend reversals.
+Question 63: "What is the True Range Volatility Indicator?"
+Answer: True Range measures the range of price movement considering highs,
+lows, and closes. It provides a comprehensive measure of price movement, aiding
+in volatility assessment.
+Question 64: "What are Bollinger Bands?"
+Answer: Bollinger Bands comprise three components: the upper band, lower
+band, and middle band. The middle band represents the 20-day or 20-bar moving
+average. Meanwhile, the upper band is calculated as the middle band’s value plus
+twice the standard deviation, and the lower band is determined as the middle
+band’s value minus twice the standard deviation.
+Question 65: "How to use Bollinger bands?"
+Answer: Overbought signals: When price action is close to the upper band,
+the current price of the instrument is considered high relative to recent prices.
+If they cross the upper band, traders consider the instrument to be overbought.
+Oversold signals: When price moves close to the lower band, the current price
+is considered low relative to recent prices. If they cross the lower band, traders
+consider the instrument to be oversold.
+Question 66: "What are Donchian Channels?"
+Answer: Upper Band: Marks the highest price over a specified period. Lower
+Band: Represents the lowest price over a defined timeframe. Middle Line (Centerline): Typically, a moving average, often set to 20 periods.
+Question 67: "How to use Donchian Channels?"
+
+3.15. TREND INDICATORS
+
+47
+
+Answer: Breakout Signals: Upward Breakout: When prices move above the
+upper band, it may signal a potential upward breakout or trend continuation.
+Downward Breakout: When prices move below the lower band, it may indicate
+a potential downward breakout or trend reversal.
+3.15. Trend Indicators
+• Emin Mammadov
+• Amirahmad Amjadi.
+Question 68: "What is the Triple Exponential Average (TRIX)?"
+Answer: The triple exponential average (TRIX) indicator is an oscillator used
+to identify oversold and overbought markets, and it can also be used as a momentum indicator. When it is used as an oscillator, a positive value indicates an
+overbought market while a negative value indicates an oversold market. It filters out market noise using the triple exponential average calculation. TRIX reads
+market momentum: crossing above zero signals a strengthening trend for buying,
+while crossing below indicates a weakening trend, suggesting potential selling opportunities.
+Question 69: "What is the meaning of Signal Line Crossing for the TRIX?"
+Answer: Traders use a signal line, a delayed moving average of TRIX, for optimal entry. A buy signal happens when TRIX crosses the line from below, and
+a sell signal occurs when it crosses from above. This works in trends (indicating retracements or trend resumption) and ranges (confirming support/resistance
+zones).
+Question 70: "What is the Average Directional Index (ADX)?"
+Answer: The average directional index (ADX) is a technical analysis indicator
+used by traders to determine the strength of a trend. The trend can be either up or
+down, and this is shown by two accompanying indicators, the negative directional
+indicator (-DI) and the positive directional indicator (+DI). The ADX commonly
+includes three separate lines. These are used to help assess whether a trade should
+be taken long or short, or if a trade should be taken at all.
+Question 71: "What is the role of the Aroon indicator?"
+Answer: The Aroon indicator is a technical indicator that is used to identify
+trend changes in the price of an asset, as well as the strength of that trend. In
+essence, the indicator measures the time between highs and the time between lows
+over a time period. The idea is that strong uptrends will regularly see new highs,
+and strong downtrends will regularly see new lows. The indicator signals when
+this is happening, and when it isn’t.
+Question 72: "What is the Commodity Channel Index (CCI)?"
+
+48
+
+3. EXAM PREPARATION - POSSIBLE QUESTIONS BASED ON THE STUDENTS CONTRIBUTIONS
+
+Answer: The Commodity Channel Index (CCI) is an oscillator used to help determine when an investment vehicle is reaching a condition of being overbought
+or oversold. It assesses price trend direction and strength, allowing traders to determine if they want to enter or exit a trade. It measures the difference between the
+current price and the historical average price. It is unbounded oscillator, meaning
+it can go higher or lower indefinitely. Overbought and oversold levels are typically determined for each individual asset by looking at historical extreme CCI
+levels where the price reversed from.
+3.16. Backtesting
+• Partha Pratim Nandi
+• Redwan Hossain
+• Md Ekram Hossain.
+3.17. Partial least square
+• Abdul Musawar (232046521)
+• Md Norul Gofran (22951199)
+• Kasvi Dua (23048230)
+• Nikhil Panchal (23072507)
+Question 73: "What kind of problems are caused by multi-linearity?"
+Answer:
+• Uncertainty in Variable Selection: Identifying the set of significant variables
+becomes challenging as the model results fluctuate, making it difficult to
+determine which variables truly contribute to the dependent variable’s
+behaviour.
+• Unstable Coefficient Estimates: The coefficients of the independent variables are not stable, making it difficult to interpret the model’s findings.
+It becomes unclear how changes in one variable will affect the dependent
+variable, as the impact is influenced by the correlated variables.
+• Overfitting and Poor Generalization: The unstable nature of the model can
+lead to overfitting, where the model performs well on the training data
+but poorly on new data. This is because the model has essentially memorized the correlations between the variables rather than capturing the
+true underlying relationships.
+3.18. Clustering
+• Anuraag Mishra (23076160)
+• Behnam Babaeian (23177836)
+• Elaheh Ghorbani (23208589)
+Question 74: Name a few types of of clustering:
+
+3.18. CLUSTERING
+
+49
+
+Answer:
+• Partitioning: Construct various partitions and then evaluate them by
+some criterion. Like: k-means.
+• Hierarchical Clustering: Create a hierarchical decomposition of the set of
+data using some criterion. Like: AGNES.
+• Density-based Clustering: Based on connectivity and density functions,
+for example DBSCAN.
+• Grid-based Clustering: Based on a multiple-level granularity structure,
+for example CLIQUE.
+• Frequent-pattern-based Clustering: Based on the analysis of frequent patterns, for example p-Cluster.
+Question 75: "Recall two hierarchical clustering methods. "
+Answer: AGNES (agglomerative) merges nodes that have the most similarity
+(or least dissimilarity). It goes on in a non-descending fashion. Eventually all
+nodes belong to the same cluster. AGNES can be terminated when a pre-defined
+number of clusters is reached. DIANA is a divisive hierarchical clustering method.
+Question 76: How do you interpret a Dendogram?
+Answer: The hight of linkage lines reveals the distance between previous clusters.
+Question 77: What is Dendogram cutting?
+Answer: The dendrogram resulting from the hierarchical clustering process
+can be cut at a certain height. Clusters below this height are considered the final clusters. This height corresponds to a specific level of dissimilarity or linkage
+distance.
+Question 80: What is the role of the Sharpe ratio?
+Answer: The Sharpe ratio is a measure of the risk-adjusted performance of an
+investment or a portfolio. It is widely used in finance to evaluate the return of an
+investment relative to its risk.
+Question 81: Why should one diversify risk?
+Answer: Assets may react differently to various economic, market, or geopolitical factors. Thus, in a diversified portfolio, the potential losses from underperforming or volatile investments may be offset by gains in other parts of the
+portfolio. A well-diversified portfolio should optimize the trade-off between risk
+and return.
+
+50
+
+3. EXAM PREPARATION - POSSIBLE QUESTIONS BASED ON THE STUDENTS CONTRIBUTIONS
+
+3.19. Hyperparameter tuning
+• Ramrachai Marma,
+• Shana Byregowda,
+• Yamini Varsha,
+• Asad Aslam.
+Question 82: "What is the role of hyperparameters in the learning process?
+Answer: Possible hyperparameters are the learning rate, the number of epochs
+or the n-estimators.
+Question 83: "What is meta-labeling?"
+Answer: A secondary classifier acts as a filter, it refines trading decisions based
+on primary model predictions.
+3.20. Hierarchical risk parity
+• Maximilian Ehmann
+• Sebastian Kreuz.
+Question 84: "What are major drawbacks of the critical line algorithm, which
+undermine its usage?"
+Answer: Instability, concentration, underperformance.
+Question 85: "How does HRP reduce the computational complexity?"
+Answer: HRP uses clustering, quasi-diagonalisation and1 recursive bisection
+in order to reduce the computational complexity.
+Question 86: "How does tree clustering work?"
+Answer: Calculate distance, define linkage criterion, update distance metric.
+Question 87: "How does quasi-diagonalization work?"
+Answer: Quasi-diagonalization is a reordering of the assets that places similar
+assets together and dissimilar assets far apart from each others.
+Question 88: "How does recursive bisection work?"
+Answer: HRP takes advantage of quasi-diagonalisation to calculate the individual asset weights.
+3.21. Outliner Detection
+• Vinay Chavada (23123658)
+• Yagnesh Pansuriya (23205699)
+• Disha Jethva (23211740)
+
+3.23. SAMPLE-WEIGHTS
+
+51
+
+Question 89: "What are Outliers?"
+Answer: An outlier refers to a data point that exhibits a substantial deviation
+from most of the dataset. In other words, it refers to a data point that differs
+significantly from other observations.
+Question 90: "What is the Interquartile Range (IQR) Method?"
+Answer: The Interquartile Range (IQR) Method identifies outliers by using
+the statistical spread between the first quartile (Q1) and the third quartile (Q3) of
+a dataset, focusing on the middle 50% of the data distribution.
+3.22. Backtesting on Synthetic Data
+• Posh Raj Dahal.
+Question 91: "Why would you use synthetic data?"
+Answer: Historical data is limited, and it may not be representative of future
+market conditions. Trying to discover the optimal thresholds by brute force with
+limited Fhistorical data easily leads to overfitting.
+3.23. Sample-Weights
+• Kshitij Dua (23032110)
+• Abhishek Datar (23071152)
+Question 92: "What is the role of Sample-Weights?"
+Answer: Sample weights allow us to assign different weights to instances based
+on their significance, ensuring that the model does not overlook rare but critical
+events.
+Question 93: "What is Return-Based Sample Weighting?"
+Answer: Return-Based Sample Weighting assign higher weights to data points
+that are associated with larger price movements or returns, assuming that these
+instances are more informative for training the model.
+Question 94: "What are T-Values?"
+Answer: In statistics, the t-statistic is the ratio of the departure of the estimated
+value of a parameter from its hypothesized value to its standard error.
+Question 95: "What is T-Value-Based Sample Weighting?"
+Answer: T-Value-Based Sample Weighting priorizes observations that have
+more significant impact on the model’s performance according to statistical tests.
+This is particularly relevant in situations where certain observations might carry
+more information or signal.
+
+52
+
+3. EXAM PREPARATION - POSSIBLE QUESTIONS BASED ON THE STUDENTS CONTRIBUTIONS
+
+3.24. Price transformations with Bollinger Bands
+• Debanjan Chakraborty (23082316)
+• Sidratun Nur Samia (23020409)
+• Khaled Hassan Sazzad (22983289)
+• Orko Dutta (23021026)
+• Nuren Samia (23045232)
+Question 96: "What is the purpose of the Bollinger bands?"
+Answer: The purpose of the Bollinger bands is to identify market highs and
+lows. The upper band represents high pricing, while the lower band represents
+low prices. A straightforward moving average between the two other bands is
+provided by the middle band. When the bands are examined, it helps identify
+patterns and compares price activity to other indications so that conclusions about
+the market’s movement at that moment may be made concurrently.
+Question 97: "Can Bollinger bands be used to evaluate market volatility?"
+Answer: Bollinger bands adjust dynamically to market conditions by expanding during periods of high volatility and contracting during lower volatility. This
+makes them a valuable tool for assessing the volatility of an asset or market.
+Question 98: "Can Bollinger bands identify a price range?"
+Answer: Bollinger bands serve as a graphical representation of price volatility
+around a moving average. Traders use them to gauge the upper and lower bounds
+of a price range, helping identify potential overbought and oversold levels.
+Question 99: "What is the role of Bollinger bands in trend analysis?"
+Answer: Bollinger bands assist in identifying the direction and strength of a
+trend. When prices consistently hug the upper band, it might indicate a strong
+uptrend, while prices persistently touching the lower band might suggest a strong
+downtrend.
+Question 100: "What is the role of Bollinger bands in identifying entry and
+exit points?"
+Answer: Traders often use Bollinger Bands to determine entry and exit points
+in trades. For instance, when prices touch or exceed the bands, it might signal
+potential reversal or continuation of a trend, helping traders make decisions about
+buying or selling.
+Question 101: "Do Bollinger bands indicate support and resistance levels?"
+Answer: The upper and lower bands can act as dynamic support and resistance levels. When the price reaches these levels, traders might anticipate a bounce
+or reversal.
+
+3.26. REGRESSION (RIDGE, LASSO, LINEAR REGRESSION INDICATOR)
+
+53
+
+3.25. LSTM
+• Parth Ghinaiya
+• Nikhil Maguwala.
+Question 102: "How does Long Short-Term Memory work?"
+Answer: The input gate, forget gate, and output gate in LSTM regulate the
+flow of information, enabling the network to selectively store, discard, and retrieve
+information at different time steps.
+Question 103: "What are the advantages of Long Short-Term Memory?"
+Answer: LSTM excels in modeling and predicting sequential data due to its
+ability to capture long-term dependencies, adapt to variable-length sequences, and
+handle vanishing / exploding gradient problems.
+3.26. Regression (Ridge, Lasso, Linear Regression Indicator)
+• Nilay Khare (23108107)
+• Vipul Tank (23185940)
+• Anmol Tiwari (23177959)
+Question 104: "How does Ridge Regression work?"
+Answer: The added penalty term in Ridge Regression penalizes the coefficients based on their squared values. This penalty encourages smaller coefficients
+and prevents them from becoming too large. As a result, Ridge Regression shrinks
+the coefficients toward zero but does not force them to be exactly zero.
+Question 105: "How does LASSO work?"
+Answer: The penalty term added in Least Absolute Shrinkage and Selection
+Operator (LASSO) is based on the sum of the absolute values of the coefficients
+of the regression variables, multiplied by a constant lambda ( ). The goal of this
+penalty term is to shrink the coefficients of less important variables all the way to
+zero, effectively performing variable selection and regularization.
+Question 106: "Are there problems when applying LASSO?"
+Answer: Lasso performs variable selection by driving some coefficients to zero.
+However, when dealing with correlated predictors (multicollinearity), Lasso tends
+to arbitrarily select one variable among the correlated group and zero out the others. This can lead to instability or difficulty in interpretation if multiple correlated
+variables are important.
+Question 107: "How does the Linear Regression Indicator work?"
+
+54
+
+3. EXAM PREPARATION - POSSIBLE QUESTIONS BASED ON THE STUDENTS CONTRIBUTIONS
+
+Answer: A positive slope suggests a bullish trend, while a negative slope indicates a bearish trend. The trend’s strength is determined by how far the slope is
+from the mean value. When the oscillator crosses above the mean value, it may be
+a signal to buy or go long. Conversely, when it crosses below the mean value, it
+may indicate a selling or shorting opportunity.
+3.27. Bet-Sizing
+• Annick Faal,
+• Bhavana Srinivas,
+• Charitha Ramaiah
+• Tejashree Ananda Kumar.
+Question 108: "What is the role of bet sizing?"
+Answer: Bet sizing typically refers to determining the amount of resources
+or investment to allocate to a particular prediction or decision. For example, bet
+sizing could refer to determining how much capital to allocate to a specific investment or trade based on the confidence level of a predictive model.
+Question 109: "What is the role of bet sizing in risk managment?"
+Answer: Bet sizing is all about having a well-thought-out risk management
+strategy. Hence, bet sizing’s primary importance lies in the fact that it helps to
+prevent capital loss on a single trade.
+Question 110: "What are the parameters in the EF3M algorithm for Gaussian
+mixtures?"
+Answer: The EF3M algorithm returns: µ1 , µ2 , 1 , 2 , namely the means and
+standard deviations of the two Gaussian distributions and the probability p1 that
+a random sample is drawn from the first distribution.
+3.28. Portfolio Optimization
+• Wajahat Abbas Jafri,
+• Muhammad Zain Anjum,
+• Faizan Ahmed,
+• Hamza Akbar
+• Muhammad Yasir Mukhtar.
+Question 111: "What is Mean-Vairance Optimization?"
+
+3.30. SAMPLING (WEIGHTED SAMPLING, ETC.)
+
+55
+
+Answer: Mean-Variance Optimization (MVO), also known as Markowitz Portfolio Theory, is a widely used framework for constructing an optimal investment
+portfolio. MVO begins by estimating the expected returns of different assets in
+the portfolio. These expected returns serve as a measure of the potential gain or
+loss from holding each asset. The concept of risk in MVO is represented by the
+variance or standard deviation of the portfolio’s returns. The idea is to consider
+not only the expected return of a portfolio but also the volatility or variability of
+those returns.
+Question 112: "What is the role of the covariance matrix in Mean-Variance
+Optimization?"
+Answer: MVO takes into account the relationships between different assets
+by considering their covariance or correlation. Positive correlations indicate that
+assets tend to move in the same direction, while negative correlations suggest they
+move in opposite directions. Diversification benefits arise from combining assets
+with lower or negatively correlated returns.
+3.29. Sampling (Random Sampling, Sequential Sampling & Cluster Sampling)
+• Anubhav Singh,
+• Harshvardhan Joshi
+• Jeta Sopa.
+Question 113: "How does Sequential Sampling work?"
+Answer: Tests sample data progressively for different observation sets in a
+sequential order without knowing a fixed sample size or period.
+3.30. Sampling (Weighted Sampling, etc.)
+• Tosiful Islam (23135689)
+• Ferdoushi Nahar (23129118)
+• A K M Yasar (23025328)
+Question 114: "How does Weighted Sampling work?"
+Answer: Weighted sampling assigns different weights to data points, influencing their likelihood of being included in a sample. This technique is valuable in
+finance datasets, allowing emphasis on specific characteristics like transaction volumes or critical time points, addressing imbalances, and enhancing model training for more meaningful insights. By giving varying importance, sample weights
+contribute to more accurate and representative results in financial analysis and
+modeling.
+Question 115: "How does Weighted Sampling address imbalances in transactions?"
+
+56
+
+3. EXAM PREPARATION - POSSIBLE QUESTIONS BASED ON THE STUDENTS CONTRIBUTIONS
+
+Answer: Weighted Sampling balances imbalances, allowing the model to learn
+effectively across different transaction volumes.
+Question 116: "How does Weighted Sampling address critical time points?"
+Answer: Weighted Sampling can explore instances with unique market conditions, e.g., significant price movements. Weighted sampling assigns higher weights
+to instances from these critical time points.
+3.31. Fractional Differentiation
+• Yash Bhesaniya (23074786)
+• Bhumi R. Patel (23034011)
+• Mit Desai (23016300)
+Question 117: "Why do we need Fractional Differentiation?"
+Answer: Financial time series data tends to be non-stationary (mean and variance do nor remain constant over time) and traditional differencing methods might
+remove important information. Fractional Differentiation helps balance the need
+for stationarity while retaining memory of past observations, improving the accuracy of predictive models in finance.
+3.32. Principal Component Analysis
+• Siddharth Mane,
+• Akshat Khara,
+• Prathamesh Agare
+• Muskan Muskan.
+Question 118: "How does PCA enhanced market understanding?"
+Answer: By identifying the principal components, we have uncovered the underlying factors driving market behaviour, leading to a deeper comprehension of
+risk and return dynamics.
+Question 119: "How does PCA enhanced strategic decision making?"
+Answer: The application of PCA facilitates better investment strategies by isolating significant patterns and trends that are not immediately apparent.
+3.33. LSTM
+• Mubashir Ul Hassan,
+• Aroosa Arshad
+• Muhammad Arbaz.
+Question 120: "What is the role of the Input, the Forget and the Output gate?"
+
+3.37. INTEGRATION OF CLUSTERING ,CO-DEPENDENCE AND WEIGHTED SAMPLING
+
+57
+
+Answer:
+• Input Gate: Selects and processes incoming financial data.
+• Forget Gate: Decides what historical financial information is no longer
+relevant.
+• Output Gate: Determines the information to be used for financial predictions.
+Question 121: "Which states are responsible for the hidden and the cell state?"
+Answer:
+• Hidden state (Ht ): is our ’short-term financial memory,’ focusing on the
+immediate market conditions.
+• Cell state (Ct ): is our ’long-term financial memory,’ retaining information
+for ongoing and future financial predictions.
+3.34. Principal Component Analysis with Regression and Augmented Dickey
+Fuller Test
+• Shouvik Chattopadhyay (23152580)
+• Uddipan Basu Bir (23139872)
+• Sonu Pathak (23213178)
+• Souhardya Chattopadhyay (23208381)
+• Vinod Kumar Girija Maruthaveeran (23236930)
+3.35. Synthetic Data For Improving Robustness
+• Bolisetty Pavan Kumar
+• Sonia Rai Kamalesan
+• Safalya Pal
+3.36. Triangular Moving Average (TMA)
+• Mohammad Abraaz (22965844)
+• Rimsha Masood (23077869)
+• Eman Khadim (23191119)
+• Bisma Arshad (23075609)
+Question 122: "What is the Triangular Moving Average (TMA)?"
+Answer: The TMA is a type of moving average calculated by averaging the
+prices of an asset over a period of time, giving greater weight to the most recent
+data points. The TMA is unique in that it gives more weight to the middle of the
+time period used, and less weight to the beginning and end of the period.
+3.37. Integration of Clustering ,Co-Dependence and Weighted Sampling
+• Ramsha Siddiqui (23081262)
+• Harshanaa Udhayakumar Seethalakshmi (23169295)
+• Maharshi Sen (23078448)
+
+58
+
+3. EXAM PREPARATION - POSSIBLE QUESTIONS BASED ON THE STUDENTS CONTRIBUTIONS
+
+3.38. Sample Weights in Financial Applications
+• Aagam Shah (23166653)
+• Akshay Sakariya (23185014)
+• Bhautik Poshiya (23158271)
+• Sweety Sharma (23159039)
+3.39. Data Preprocessing - Bet sizing - Backtesting - HRP
+• Swapnali Ghumkar (23081224)
+• Tejashree Dhawle (23097065)
+• Aayushi Shah ( 23020042)
+• Abantika Bose (23082335)
+3.40. Structural break-aware pairs trading strategy
+• Priyanka Muddarla (23008021)
+• Israt Amir Koushika (23036159)
+• Shreyas Chakravarthy (23074733)
+• Shuqi Zhang (23035620)
+Question 123: "Why does one study the Risk of Structural Breaks in pairs trading?"
+Answer: Rapid market changes, known as structural breaks, can disrupt the
+established relationships between paired stocks, leading to significant losses in
+intraday trading.
+3.41. Structural Breaks
+• Hari Krishnan
+• Dilli Ravi (23240283)
+• Shirley Nikkitha (23148087)
+3.42. Cluster-based outlier detection (DBSCAN & Isolation Forests)
+• Moeen Haider (23080927)
+• Ajharali Shaikh (23072460)
+• Muhammad Shoaib (23100849)
+• Aravind Ryali (23072348)
+• Dhaleema Davis (23236396)
+Question 124: "How does Density-Based Spatial Clustering work?"
+Answer: Given a set of points in some space, it groups together points that
+are closely packed together (points with many nearby neighbours), marking as
+outliers points that lie alone in low-density regions (whose nearest neighbours are
+too far away).
+Question 125: "How do isolation forest work?"
+
+3.44. CROSS-SECTIONAL ASSET PRICING
+
+59
+
+Answer: The step-by-step approach of isolation forest :
+• Initialize the algorithm by setting the number of isolation trees to be
+grown, the maximum depth of each tree, subsampling size.
+• For each isolation tree, randomly select a subset of the data and grow
+the tree by repeating partitioning the data. This will continue until a leaf
+node or the maximum depth is reached. The splitting value of each tree
+will be a random value between maximum and minimum value of that
+feature.
+• Outliers are identified as points with a shorter average path length than
+normal points
+3.43. Entropy Feature
+• Zeel Kiritbhai Nakrani (23158267)
+• Kenil Savani (23080185)
+• Janvi Ladola (23088219)
+• Hardikkumar Vaghela (23076156)
+Question 126: "What is the role of the Lemple-Ziv algorithm?"
+Answer: LZ algorithm efficiently decomposes a message into non-redundant
+substrings. If we increase the available history, we can expect that messages with
+high entropy will produce relatively shorter non-redundant substrings.
+3.44. Cross-Sectional Asset Pricing
+• Brij Vachhani (23219225),
+• Chetan Rakhasiya (22981334),
+• Khaled Saifullah (22783639),
+• Muhammad Ismail (23035796),
+• Sandip Kumar Basak (23041782).
+Question 127: "How does the Capital Asset Pricing Model (CAPM) work?"
+Answer: CAPM is a model to determine price of any individual stock based
+on the market risk. CAPM focuses on market risk. After calculating the expected
+return, we shall take the decision if the investment is appropriate or not. Since,
+this model is only focused on one factor, i.e., market risk, it is also called as singlefactor asset pricing model.
+Question 128: "How does the Fama-French Three Factor Model work?"
+Answer: Fama-French Three Factor Model : It is an extension of the Capital Asset Pricing Model itself. While the CAPM only focuses on the systematic
+risk/market risk, FF Three Factor Model focuses on another two factors. These
+factors are book-to-market ratio as well as market capitalisation (size of a firm)
+factor.
+Question 129: "How does the Fama-French Five Factor Model work?"
+
+60
+
+3. EXAM PREPARATION - POSSIBLE QUESTIONS BASED ON THE STUDENTS CONTRIBUTIONS
+
+Answer: Fama-French Five Factor Model: In 2015, profitability and investment were added to the earlier highly-successful FF Three Factor model. This
+model was later considered a failure due to overfitting concerns.
+Question 130: "How do Stochastic Discount Factors work?"
+Answer: The price of an asset at time t is the expected discounted value of the
+asset’s pay-off based on information available at time t. The Stochastic Discount
+Factor method is used with multiple characteristics-based factors to determine
+cross- sectional pricing patterns in a reduced-form(without explicitly specifying
+the underlying economic factors that drive asset prices) pricing model.
+
+Bibliography
+[1] Eugene F. Fama and Kenneth R. French, A five-factor asset pricing model, Journal of Financial Economics 116, 1–22 (2015).
+[2] Trevor Hastie, Robert Tibshirani and Jerome Friedman, The Elements of Statistical Learning (2nd
+edition), Springer, New York, NY (2009).
+[3] Arthur E Hoerl and Robert W. Kennard, Ridge regression: Biased estima- tion for nonorthogonal problems, Technometrics 12, 55–67 (1970).
+[4] Stefan Nagel Machine Learning in Asset Pricing, Princeton Lectures in Finance (2021); ISBN 978-0691-218700.
+[5] David H. Wolpert, The lack of a priori distinctions between learning algorithms, Neural computation 8,
+1341–1390 (1996).
+[6] Hui Zou and Trevor Hastie, Regularization and variable selection via the elastic net, Journal of the
+Royal Statistical Society: Series B (Statistical Methodology) 67, 301–320 (2005).
+
+61
+
+
