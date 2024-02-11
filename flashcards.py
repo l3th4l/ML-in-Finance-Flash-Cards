@@ -13,14 +13,11 @@ def initialize_flashcards(flashcards):
             initial_confidence_scores = {i: 50 for i, _ in enumerate(flashcards)}
             json.dump(initial_confidence_scores, file)
 
+def load_confidence_scores():
+    if not os.path.exists("confidence_scores.json"):
+        return {}
     with open("confidence_scores.json", "r") as file:
-        confidence_scores = json.load(file)
-
-    for i, card in enumerate(flashcards):
-        if i in confidence_scores:
-            card['confidence_score'] = confidence_scores[i]
-        else:
-            card['confidence_score'] = 50
+        return json.load(file)
 
 def update_confidence_score(confidence_score, rating):
     if rating == 1:
@@ -30,16 +27,28 @@ def update_confidence_score(confidence_score, rating):
     return confidence_score
 
 def display_random_flashcard(flashcards):
+    # Load confidence scores
+    confidence_scores = load_confidence_scores()
+
+    # Assign confidence scores to flashcards
+    for i, card in enumerate(flashcards):
+        if i in confidence_scores:
+            card['confidence_score'] = confidence_scores[i]
+        else:
+            card['confidence_score'] = 50
+
+    # Choose random flashcard based on confidence scores
     random_flashcard = random.choices(flashcards, weights=[1 / card['confidence_score'] for card in flashcards])[0]
+
     print("\nQuestion:", random_flashcard['question'])
     input("\nPress Enter to reveal the answer...")
     print("\nAnswer:", random_flashcard['answer'])
     rating = int(input("\nRate your confidence level (1 for low, 2 for medium, 3 for high): "))
-    random_flashcard['confidence_score'] = update_confidence_score(random_flashcard['confidence_score'], rating)
+    confidence_scores[flashcards.index(random_flashcard)] = update_confidence_score(random_flashcard['confidence_score'], rating)
 
-    # Save confidence score
+    # Save confidence scores
     with open("confidence_scores.json", "w") as file:
-        json.dump({i: card['confidence_score'] for i, card in enumerate(flashcards)}, file)
+        json.dump(confidence_scores, file)
 
 # Replace 'flashcards.json' with the path to your JSON file
 filename = 'flashcards.json'
