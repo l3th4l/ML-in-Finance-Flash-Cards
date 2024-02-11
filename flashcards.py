@@ -1,54 +1,58 @@
 import json
 import random
+import os
 
 def load_flashcards(filename):
     with open(filename, 'r') as file:
         flashcards = json.load(file)
     return flashcards
 
-def add_confidence_score(flashcards):
-    for flashcard in flashcards:
-        # Assign an initial confidence score of 50
-        flashcard['confidence_score'] = 50
-    return flashcards
+def initialize_flashcards(flashcards):
+    if not os.path.exists("confidence_scores.json"):
+        with open("confidence_scores.json", "w") as file:
+            initial_confidence_scores = {i: 50 for i, _ in enumerate(flashcards)}
+            json.dump(initial_confidence_scores, file)
+
+    with open("confidence_scores.json", "r") as file:
+        confidence_scores = json.load(file)
+
+    for i, card in enumerate(flashcards):
+        if i in confidence_scores:
+            card['confidence_score'] = confidence_scores[i]
+        else:
+            card['confidence_score'] = 50
+
+def update_confidence_score(confidence_score, rating):
+    if rating == 1:
+        confidence_score = max(1, confidence_score - 10)
+    elif rating == 3:
+        confidence_score = min(100, confidence_score + 10)
+    return confidence_score
 
 def display_random_flashcard(flashcards):
-    # Weighted random choice based on confidence scores with slight reduction for higher scores
-    confidence_scores = [flashcard['confidence_score'] for flashcard in flashcards]
-    total_confidence = sum(confidence_scores)
-    probabilities = [score / total_confidence for score in confidence_scores]
-    random_flashcard = random.choices(flashcards, weights=probabilities)[0]
-    
+    random_flashcard = random.choices(flashcards, weights=[1 / card['confidence_score'] for card in flashcards])[0]
     print("\nQuestion:", random_flashcard['question'])
     input("\nPress Enter to reveal the answer...")
     print("\nAnswer:", random_flashcard['answer'])
-    return random_flashcard
+    rating = int(input("\nRate your confidence level (1 for low, 2 for medium, 3 for high): "))
+    random_flashcard['confidence_score'] = update_confidence_score(random_flashcard['confidence_score'], rating)
 
-def update_confidence_score(flashcard, confidence_score):
-    # Bound the confidence score between 1 and 100
-    flashcard['confidence_score'] = max(1, min(100, confidence_score))
-    return flashcard
+    # Save confidence score
+    with open("confidence_scores.json", "w") as file:
+        json.dump({i: card['confidence_score'] for i, card in enumerate(flashcards)}, file)
 
 # Replace 'flashcards.json' with the path to your JSON file
-filename = 'output.json'
+filename = 'flashcards.json'
 
 # Load flashcards from the JSON file
 flashcards = load_flashcards(filename)
 
-# Add confidence scores to each flashcard
-flashcards_with_confidence = add_confidence_score(flashcards)
+# Initialize flashcards with confidence scores
+initialize_flashcards(flashcards)
 
+# Continuously display random flashcards until the user decides to exit
 while True:
-    # Display a random flashcard weighted by confidence scores
-    random_flashcard = display_random_flashcard(flashcards_with_confidence)
-    
-    confidence_score = int(input("\nHow confident do you feel about this flashcard? (1: Low, 2: Medium, 3: High): "))
-    
-    if confidence_score == 1:
-        random_flashcard = update_confidence_score(random_flashcard, random_flashcard['confidence_score'] - 10)
-    elif confidence_score == 3:
-        random_flashcard = update_confidence_score(random_flashcard, random_flashcard['confidence_score'] + 10)
-    
-    repeat = input("\nDo you want to continue? (yes/no): ")
-    if repeat.lower() != 'yes':
+    display_random_flashcard(flashcards)
+    continue_or_exit = input("\nPress Enter to continue or type 'exit' to quit: ")
+    if continue_or_exit.lower() == 'exit':
         break
